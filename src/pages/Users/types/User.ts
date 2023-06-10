@@ -2,7 +2,7 @@ export type User = {
   id: string
   fullName: string
   document: string
-  birthDate: Date
+  birthdate: Date
   email: string
   emailVerified: boolean
   mobile: string
