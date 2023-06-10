@@ -1,10 +1,11 @@
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
-import WhatsAppIcon from '@mui/icons-material/WhatsApp';
-import { Stack, IconButton } from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
+import { Stack, IconButton, Box, Button, Paper } from '@mui/material';
 import { GridRenderCellParams, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 import MyDataGrid from '../../components/MyDataGrid';
 import { User } from './types/User';
+import PageTitle from '../../components/PageTitle';
+import MyBreadcrumbs from '../../components/MyBreadcrumbs';
+import { Delete, Edit, PersonAddAlt, WhatsApp } from '@mui/icons-material';
 
 const UserList = () => {
   function onCall(params: GridRenderCellParams): void {
@@ -61,11 +62,11 @@ const UserList = () => {
             size="small"
             onClick={() => onCall(params)}
           >
-            <WhatsAppIcon fontSize="inherit" />
+            <WhatsApp fontSize="inherit" />
           </IconButton>
 
           <IconButton color="info" size="small" onClick={() => onEdit(params)}>
-            <EditIcon fontSize="inherit" />
+            <Edit fontSize="inherit" />
           </IconButton>
 
           <IconButton
@@ -73,7 +74,7 @@ const UserList = () => {
             size="small"
             onClick={() => onDelete(params)}
           >
-            <DeleteIcon fontSize="inherit" />
+            <Delete fontSize="inherit" />
           </IconButton>
         </Stack>
       )
@@ -98,9 +99,31 @@ const UserList = () => {
       state: ''
     }
   ];
-  
+
   return (
-    <MyDataGrid columns={columns} rows={users}/>
+    <>
+      <Stack direction={{ xs: 'column', sm: 'row' }} gap={1} mb={2}>
+        <Box sx={{ flexGrow: 1 }}>
+          <PageTitle title='Lista' />
+          <MyBreadcrumbs
+            path={[{ label: 'Usuários', to: '/users' }, { label: 'Lista' }]}
+          />
+        </Box>
+        <Box>
+          <Button
+            component={RouterLink}
+            to='/users/new'
+            variant='contained'
+            startIcon={<PersonAddAlt />}
+          >
+            Novo Usuário
+          </Button>
+        </Box>
+      </Stack>
+      <Paper>
+        <MyDataGrid columns={columns} rows={users} />
+      </Paper>
+    </>
   );
 };
 export default UserList;
