@@ -3,7 +3,7 @@ import { z } from 'zod';
 export const UserSchema = z.object({
   fullName: z.string().nonempty('Este campo é obrigatório'),
   document: z.string().nonempty('Este campo é obrigatório'),
-  birthDate: z.date().optional(),
+  birthdate: z.date().optional(),
   email: z
     .string()
     .email('E-mail não reconhecido')
