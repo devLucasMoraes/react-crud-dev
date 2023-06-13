@@ -1,3 +1,6 @@
+import { z } from 'zod';
+import { UserSchema } from '../schemas/UserShema';
+
 export type User = {
   id: string
   fullName: string
@@ -14,3 +17,5 @@ export type User = {
   city: string
   state: string
 }
+
+export type TUserShema = z.infer<typeof UserSchema>
