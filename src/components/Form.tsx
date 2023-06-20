@@ -14,26 +14,25 @@ import {
 import { DatePicker } from '@mui/x-date-pickers';
 import { useCallback, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { Link as RouterLink, useNavigate, useParams } from 'react-router-dom';
 
 import { DevTool } from '@hookform/devtools';
-//import { useLocalStorage } from 'usehooks-ts';
+import { useLocalStorage } from 'usehooks-ts';
 
-//import FormTitle from '../../../components/FormTitle';
 
 import { findBrazilianZipCode } from '../services/api';
 
 import { UserSchema } from '../pages/Users/schemas/UserShema';
 
-import { TUserShema } from '../pages/Users/types/User';
+import { TUserShema, User } from '../pages/Users/types/User';
 import { CheckCircle, Info } from '@mui/icons-material';
 import { zodResolver } from '@hookform/resolvers/zod';
 import FormTitle from './FormTitle';
 
 const Form = () => {
   console.log('renderizou Form');
-  // const [users, setUsers] = useLocalStorage<User[]>('users', []);
-  //const { id } = useParams();
+  const [users, setUsers] = useLocalStorage<User[]>('users', []);
+  const { id } = useParams();
   const navigate = useNavigate();
 
   const {
@@ -44,7 +43,7 @@ const Form = () => {
     watch,
     setFocus,
     setValue,
-  } = useForm<TUserShema>({
+  } = useForm<User>({
     criteriaMode: 'all',
     mode: 'all',
     resolver: zodResolver(UserSchema),
@@ -67,10 +66,19 @@ const Form = () => {
 
   const [zipCodeFounded, setZipCodeFounded] = useState<boolean>();
 
-  const onSubmit = (data: TUserShema) => {
+  const onSubmit = (data: User) => {
     // registra o usuário
     console.log(data);
+    if (!id) {
+      setUsers([...users, { ...data, id: `${users.length + 1}` }]);
+    } else {
+      // se tiver id, atualiza o usuário
+      const newUsers = [...users];
+      const userIndex = users.findIndex((user) => user.id === id);
+      newUsers[userIndex] = { ...data, id };
 
+      setUsers(newUsers);
+    }
     navigate('/users/');
   };
 
@@ -118,6 +126,32 @@ const Form = () => {
 
     onZipCode(zipCode);
   }, [onZipCode, setValue, zipCode]);
+
+  useEffect(() => {
+    console.log('if !id', id);
+    if (!id) return;
+    console.log('passou.......', id);
+
+    // busca o usuário pelo id
+    const user = users.find((user) => user.id === id);
+
+    if (!user) return;
+
+    // se encontrado, preenche o formulário via setValue do React Hook Form
+    setValue('fullName', user.fullName);
+    setValue('document', user.document);
+    setValue('birthdate', new Date(user.birthdate));
+    setValue('email', user.email);
+    setValue('emailVerified', user.emailVerified);
+    setValue('mobile', user.mobile);
+    setValue('zipCode', user.zipCode);
+    setValue('addressName', user.addressName);
+    setValue('number', user.number);
+    setValue('complement', user.complement);
+    setValue('neighborhood', user.neighborhood);
+    setValue('city', user.city);
+    setValue('state', user.state);
+  }, [id]);
 
   return (
     <>
@@ -368,6 +402,7 @@ const Form = () => {
                 <MenuItem value={'TO'}>Tocantins</MenuItem>
               </Select>
             </FormControl>
+
           )}
         />
 

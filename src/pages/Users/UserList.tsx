@@ -1,25 +1,38 @@
-import { Link as RouterLink } from 'react-router-dom';
-import { Stack, IconButton, Box, Button, Paper } from '@mui/material';
+import { Stack, IconButton } from '@mui/material';
 import { GridRenderCellParams, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 import MyDataGrid from '../../components/MyDataGrid';
 import { User } from './types/User';
-import PageTitle from '../../components/PageTitle';
-import MyBreadcrumbs from '../../components/MyBreadcrumbs';
-import { Delete, Edit, PersonAddAlt, WhatsApp } from '@mui/icons-material';
+import { Delete, Edit, WhatsApp } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
+import { useLocalStorage } from 'usehooks-ts';
+import BasePageLayout from '../../components/BasePageLayout';
 
 const UserList = () => {
+  const navigate = useNavigate();
+  const [users, setUsers] = useLocalStorage<User[]>('users', []);
+
   function onCall(params: GridRenderCellParams): void {
-    throw new Error('Function not implemented.');
+    // se existe o número de telefone, abre o WhatsApp
+    if (!params.row.mobile) return;
+
+    window.location.href = `https://wa.me/55${params.row.mobile.replace(
+      /[^\d]+/g,
+      ''
+    )}`;
   }
 
 
   function onEdit(params: GridRenderCellParams): void {
-    throw new Error('Function not implemented.');
+    // se existe o id, navega para a página de edição
+    if (!params.row.id) return;
+    navigate(`/users/${params.row.id}`);
   }
 
 
   function onDelete(params: GridRenderCellParams): void {
-    throw new Error('Function not implemented.');
+    // se existe o id, remove o usuário
+    if (!params.row.id) return;
+    setUsers(users.filter((user) => user.id !== params.row.id));
   }
 
   const columns: GridColDef<User>[] = [
@@ -81,49 +94,14 @@ const UserList = () => {
     }
   ];
 
-  const users = [
-    {
-      id: '1',
-      fullName: 'Lucas Moraes',
-      document: '000.000.000-00',
-      birthdate: new Date(1970, 1, 1),
-      email: 'devlucasmoraes@gmail.com',
-      emailVerified: true,
-      mobile: '(71) 99954-9776',
-      zipCode: '44089-278',
-      addressName: '',
-      number: '',
-      complement: '',
-      neighborhood: '',
-      city: '',
-      state: ''
-    }
-  ];
+
+
 
   return (
-    <>
-      <Stack direction={{ xs: 'column', sm: 'row' }} gap={1} mb={2}>
-        <Box sx={{ flexGrow: 1 }}>
-          <PageTitle title='Lista' />
-          <MyBreadcrumbs
-            path={[{ label: 'Usuários', to: '/users' }, { label: 'Lista' }]}
-          />
-        </Box>
-        <Box>
-          <Button
-            component={RouterLink}
-            to='/users/new'
-            variant='contained'
-            startIcon={<PersonAddAlt />}
-          >
-            Novo Usuário
-          </Button>
-        </Box>
-      </Stack>
-      <Paper>
-        <MyDataGrid columns={columns} rows={users} />
-      </Paper>
-    </>
+    <BasePageLayout pageTitle='Listar' labelTitle='Listar'>
+      <MyDataGrid columns={columns} rows={users} />
+    </BasePageLayout>
+
   );
 };
 export default UserList;
