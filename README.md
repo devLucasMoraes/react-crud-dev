@@ -17,7 +17,6 @@ Se você é um desenvolvedor que já possui conhecimentos básicos de React e de
 - Material UI
 - React Router DOM
 - Axios
-- Yup
 - Zod
 - Date-fns
 - React Hook Form
