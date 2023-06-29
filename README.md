@@ -28,10 +28,10 @@ Para executar o projeto, siga as etapas abaixo:
 
 1. Clone o repositório do projeto.
 2. Navegue até a pasta do projeto.
-3. Execute o comando `npm install` para instalar todas as dependências listadas no arquivo `package.json`.
-4. Utilize o comando `npm run dev` para iniciar a aplicação em modo de desenvolvimento.
+3. Execute o comando `pnpm install` para instalar todas as dependências listadas no arquivo `package.json`.
+4. Utilize o comando `pnpm dev` para iniciar a aplicação em modo de desenvolvimento.
 
-Certifique-se de que você possui o Node.js e o npm (ou yarn) instalados em seu ambiente de desenvolvimento.
+Certifique-se de que você possui o Node.js e o pnpm (ou yarn) instalados em seu ambiente de desenvolvimento.
 
 ## Agradecimentos
 
