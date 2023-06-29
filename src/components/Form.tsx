@@ -24,9 +24,9 @@ import { findBrazilianZipCode } from '../services/api';
 
 import { UserSchema } from '../pages/Users/schemas/UserShema';
 
-import { TUserShema, User } from '../pages/Users/types/User';
-import { CheckCircle, Info } from '@mui/icons-material';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { CheckCircle, Info } from '@mui/icons-material';
+import { User } from '../pages/Users/types/User';
 import FormTitle from './FormTitle';
 
 const Form = () => {
